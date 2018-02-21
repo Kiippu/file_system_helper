@@ -50,7 +50,7 @@ public:
 	// Crates a file with extension
 	void createFile(std::string path ,std::string fileName, std::string extension);
 	// Write to a file, useful for logs or error msg's
-	void writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream, std::string msgType = "MSG");
+	void writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream, bool timeStamp = false, std::string msgType = "");
 
 
 	// TODO: imple this!! depends on JSON or not etc

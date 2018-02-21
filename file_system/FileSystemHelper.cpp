@@ -56,7 +56,7 @@ void FileSystemHelper::createFile(std::string path, std::string fileName, std::s
 	std::ofstream(fileCreate) << "";
 }
 
-void FileSystemHelper::writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream, std::string msgType)
+void FileSystemHelper::writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream,bool timeStamp, std::string msgType)
 {
 	using namespace std::chrono;
 	// make path
@@ -68,17 +68,29 @@ void FileSystemHelper::writeToFileAppend(std::string path, std::string filename,
 	std::ofstream out;
 	out.open(file,std::ios::app);
 	if (out.is_open()) {
-		//if there is a msg then add it
-		if (msgType.size() > 1) {
+		//if there is a msg and time stamp
+		if (msgType.size() > 4 && timeStamp == true) {
 			auto time_point = system_clock::now();
 			std::time_t now_c = std::chrono::system_clock::to_time_t(time_point);
 			auto time = std::ctime(&now_c);
 			auto str_time = std::string(time).substr(0, std::string(time).size() - 2);
 			out << "\n[\'" << msgType << "\'][ " << str_time << " ] \"" << stream << "\"";
 		}
-		//if there is no msg then just outstream the msg
-		else {
-			out << "\n[\'MSG\']" << stream;
+		//if ther is msg but not timestamp
+		else if(msgType.size() > 0 && timeStamp == false){
+			out << "\n[\'" << msgType << "\']" << stream << "\"";
+		}
+		//if not msg and yes to timestamp
+		else if (msgType.size() == 0 && timeStamp == true) {
+			auto time_point = system_clock::now();
+			std::time_t now_c = std::chrono::system_clock::to_time_t(time_point);
+			auto time = std::ctime(&now_c);
+			auto str_time = std::string(time).substr(0, std::string(time).size() - 2);
+			out << "\n[ " << str_time << " ] \"" << stream << "\"";
+		}
+		//if there is no msg and no want timestamp
+		else if(msgType.size() == 0 && timeStamp == false) {
+			out << "\n" << stream;
 		}
 	}
 	// if there is not file of that name
@@ -87,6 +99,7 @@ void FileSystemHelper::writeToFileAppend(std::string path, std::string filename,
 	}
 	// close file
 	out.close();
+	cout << msgType.size() << endl;
 }
 
 void FileSystemHelper::replaceDataInFile(std::string path, std::string filename, std::string extension, std::string member, std::string data)
