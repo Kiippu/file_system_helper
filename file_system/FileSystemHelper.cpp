@@ -8,7 +8,6 @@
 #include <iomanip>
 #include <sstream>
 
-
 namespace fs = std::experimental::filesystem;
 using namespace std;
 
@@ -27,13 +26,18 @@ void FileSystemHelper::removeFolders(std::string pathName)
 
 vector<string> FileSystemHelper::getDirectoryFiles(const string & dir, const vector<string> & extensions)
 {
+	//temp vector
 	vector<string> files;
+	//look thorugh all directories for files with extension
 	for (auto & p : fs::recursive_directory_iterator(dir))
 	{
+		//if the file is a file not folder
 		if (fs::is_regular_file(p))
 		{
+			//if file has extension
 			if (extensions.empty() || find(extensions.begin(), extensions.end(), p.path().extension().string()) != extensions.end())
 			{
+				//add DIR to temp vector
 				files.push_back(p.path().string());
 			}
 		}
@@ -43,37 +47,64 @@ vector<string> FileSystemHelper::getDirectoryFiles(const string & dir, const vec
 
 void FileSystemHelper::createFile(std::string path, std::string fileName, std::string extension)
 {
+	// make path
 	fs::path dir = path;
 	fs::path file_name = fileName;
+	
+	// create DIR
 	fs::path fileCreate = dir / file_name / "." / extension;
 	std::ofstream(fileCreate) << "";
 }
 
-void FileSystemHelper::writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream, std::string msgType = "")
+void FileSystemHelper::writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream, std::string msgType)
 {
 	using namespace std::chrono;
-
+	// make path
 	fs::path dir = path;
 	fs::path file_name = filename + "." +  extension;
 	fs::path file = dir / file_name;
 
-	cout << file;
+	// open out stream
 	std::ofstream out;
 	out.open(file,std::ios::app);
 	if (out.is_open()) {
+		//if there is a msg then add it
 		if (msgType.size() > 1) {
 			auto time_point = system_clock::now();
 			std::time_t now_c = std::chrono::system_clock::to_time_t(time_point);
 			auto time = std::ctime(&now_c);
 			auto str_time = std::string(time).substr(0, std::string(time).size() - 2);
-			out << "\n[\'" << msgType << "\'][ " << str_time << " ] \"" << stream << "\"" << std::endl;
+			out << "\n[\'" << msgType << "\'][ " << str_time << " ] \"" << stream << "\"";
 		}
+		//if there is no msg then just outstream the msg
 		else {
-			out << "\n" << stream;
+			out << "\n[\'MSG\']" << stream;
 		}
 	}
+	// if there is not file of that name
 	else {
 		cout << "[\'ERROR\'] { " << file << " } was not opened or found." << endl;
 	}
+	// close file
 	out.close();
+}
+
+void FileSystemHelper::replaceDataInFile(std::string path, std::string filename, std::string extension, std::string member, std::string data)
+{
+	// make path
+	fs::path dir = path;
+	fs::path file_name = filename + "." + extension;
+	fs::path file = dir / file_name;
+
+	//open in stream
+	ifstream stream;
+	stream.open(file);
+
+	/****************************
+	TODO:
+	add in JSON file searcher
+
+	may need to change arg's
+
+	*****************************/
 }

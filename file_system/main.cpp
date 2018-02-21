@@ -15,6 +15,8 @@ using namespace std;
 
 int main() {
 
+	// TEST DATA: START
+
 	std::string pathName("test/a/b");
 
 	FileSystemHelper::getInstance().createFolder(pathName);
@@ -29,11 +31,25 @@ int main() {
 		"./sandbox/will_be.ignored"
 	};
 
-	FileSystemHelper::getInstance().writeToFileAppend("./sandbox","kory","json","apples are amazing","");
-	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples are amazing", "");
+	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples are amazing");
+	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "txt", "apples are amazing");
 	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples are amazing", "ERROR");
+	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples are not amazing", "SYSTEM_ERROR");
 
+
+	std::vector<std::string> list;
+	std::vector<std::string> ext;
+	ext.push_back(".json");
+	ext.push_back(".txt");
+	list = FileSystemHelper::getInstance().getDirectoryFiles("././sandbox",ext);
+
+	for (auto obj : list) {
+		std::cout << obj << endl;
+
+	}
 	
+	// TEST DATA: END
+
 
 	return 0;
 }
