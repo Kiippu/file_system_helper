@@ -31,7 +31,7 @@ int main() {
 		"./sandbox/will_be.ignored"
 	};
 
-	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples1 are amazing with false");
+	FileSystemHelper::getInstance().writeToFileAppend("./logging", "kory", "json", "apples1 are amazing with false");
 	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples2 are amazing with true", true);
 	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples3 are amazing with false",false, "ERROR");
 	FileSystemHelper::getInstance().writeToFileAppend("./sandbox", "kory", "json", "apples4 are not amazing with true",true, "SYSTEM_ERROR");

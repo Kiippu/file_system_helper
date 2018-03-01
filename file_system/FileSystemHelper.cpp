@@ -53,7 +53,7 @@ void FileSystemHelper::createFile(std::string path, std::string fileName, std::s
 	
 	// create DIR
 	fs::path fileCreate = dir / file_name / "." / extension;
-	std::ofstream(fileCreate) << "";
+	std::ofstream(fileCreate.c_str());
 }
 
 void FileSystemHelper::writeToFileAppend(std::string path, std::string filename, std::string extension, std::string stream,bool timeStamp, std::string msgType)
